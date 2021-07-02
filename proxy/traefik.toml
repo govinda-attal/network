@@ -4,7 +4,7 @@ defaultEntryPoints = ["http", "https"]
   # [entryPoints.uaa]
   #   address = ":8080"
   [entryPoints.dashboard]
-    address = ":8080"    
+    address = ":9080"    
     [entryPoints.dashboard.auth]
       [entryPoints.dashboard.auth.basic]
         users = ["admin:$apr1$sbZR9k7c$qygqcp2yYx.KY4Ks4us/e/"]

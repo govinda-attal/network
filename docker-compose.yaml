@@ -4,7 +4,6 @@ networks:
   bank:
   neo:
 
-
 services:
   traefik:
     container_name: traefik
@@ -21,7 +20,7 @@ services:
           - proxy.neo.com
     ports:
       - "80:80"
-      - "8080:8080"
+      - "9080:9080"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -39,8 +38,8 @@ services:
       - traefik.docker.network=bank
       - traefik.port=8080
       - traefik.default.protocol=http
-    ports:
-      - 9080:8080
+    # ports:
+      # - 8080:8080
     volumes:
       - ./configs/uaa.yml:/uaa/uaa.yml
       - ./configs/log4j2.properties:/etc/config/log4j2.properties
@@ -63,6 +62,23 @@ services:
       bank:
         aliases:
         - uaac.neo
+
+  uaa-ui:
+    container_name: uaa-ui
+    hostname: uaa-ui
+    image: gattal/uaa-ui
+    labels:
+      - traefik.backend=uaa-ui
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:uaa-ui.neo.com
+      - traefik.docker.network=bank
+      - traefik.port=8080
+      - traefik.default.protocol=http
+    networks:
+      bank:
+        aliases:
+        - uaa-ui.neo
+        - uaa-ui.neo.com
   
   database:
     container_name: database
@@ -97,3 +113,65 @@ services:
       bank:
         aliases:
           - adminer
+
+  zoo:
+    image: confluentinc/cp-zookeeper:6.1.1
+    hostname: zoo
+    container_name: zoo
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: "2181"
+      ZOOKEEPER_TICK_TIME: "2000"
+      ZOOKEEPER_SERVERS: "zoo:22888:23888"
+    restart: on-failure
+    networks:
+      bank:
+        aliases:
+          - zoo
+
+  kafka:
+    image: confluentinc/cp-kafka:6.1.1
+    hostname: kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_DOCKER_INTERNAL:PLAINTEXT,LISTENER_DOCKER_EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_DOCKER_INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: "zoo:2181"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zoo
+    restart: on-failure
+    networks:
+      bank:
+        aliases:
+          - kafka.neo
+          - kafka.neo.com
+
+  kowl:
+    image: quay.io/cloudhut/kowl:v1.2.2
+    restart: on-failure
+    hostname: kowl
+    container_name: kowl
+    volumes:
+    - ./configs/kowl-config.yaml:/etc/kowl/config.yaml
+    entrypoint: ./kowl --config.filepath=/etc/kowl/config.yaml
+    labels:
+      - traefik.backend=kowl
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:kowl.neo.com
+      - traefik.docker.network=bank
+      - traefik.port=8080
+      - traefik.default.protocol=http
+    depends_on:
+      - kafka
+    networks:
+      bank:
+        aliases:
+          - kowl
