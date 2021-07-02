@@ -1,0 +1,277 @@
+issuer:
+  uri: http://id.neo.com/uaa
+
+encryption:
+  active_key_label: CHANGE-THIS-KEY
+  encryption_keys:
+  - label: CHANGE-THIS-KEY
+    passphrase: CHANGEME
+
+login:
+  url: http://id.neo.com/uaa
+  entityBaseURL: http://id.neo.com/uaa
+  authorize:
+    url: http://id.neo.com/uaa/oauth/authorize
+  serviceProviderKey: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICXQIBAAKBgQDSWEfulSOYHqiuFvqbCTQMi7BaleuEfURE9X6aNKU9SSxq4BIL
+    ebufX9InrWFYMpK2MaH9ohDv3QXqbLIKMK8zp9wtIwYkLbPSs/ABHALkyq2CHm/z
+    ppbNa+avG+WAbSmZw0WHi157YFjSMdApELchTj8+CYebDISq05rbnNKpaQIDAQAB
+    AoGBAIRlwukegKgIbD4gAp/BXDylVFzATt03B9ir+YNQrc10mHuxDEqi1gEMDDij
+    PkmIk6YQeZkvAKAqK8YRosMdP7kMxzTQNEZ6OmT/8Wa9UPEp/nLJl9IkZwx5B+NS
+    Y34rB2YpJplrZbERU2egRL6hNMiJcQZ0TnB2MtRu8rgxWcQBAkEA6SuSF7RYA90r
+    22TPvdbI4OpCpDl1Awp7lZiCkgJxPYOtUwDw4j+sWPWZI2DZa21tg9j77xhszF83
+    tAbqp+Sh6QJBAObwl1MHPEhRBlDEsUxZ1Mmf60gT55K9yBPthVyyWH5JMZZsYJUU
+    rYK4je/IEZSltN56cMNwxVRZ1gjWp2XNm4ECQFw62s+7izEEFCv1BWM/CThGEVQq
+    UgmA5P94UvV0N9ywMCfr8Fxd+Us64ncnAPlIUJBdjNG3ZJm2dC8mqTz957kCQAkL
+    rXG0G9ldSxkIy0UJU7teBzI4jV6DDn4xVILv/WVc6pNQxWuxdqZjIjQdKwsefnok
+    Y5xUI3aNWkPYXJAxQIECQQCgq1o/WP2wmmwqDbEiQGe7kXiEKzJJpjJD7ygZq1Cj
+    N6alCim3EDA/3c5pA3rPnTxhS+PhgreO8MRmVjRCzYQW
+    -----END RSA PRIVATE KEY-----
+  serviceProviderKeyPassword: admin
+  serviceProviderCertificate: |
+    -----BEGIN CERTIFICATE-----
+    MIICSjCCAbMCFGhWKOgBeKIo+sgbFp/gcJ5iT0F3MA0GCSqGSIb3DQEBCwUAMGQx
+    CzAJBgNVBAYTAkFVMQwwCgYDVQQIDANOU1cxDzANBgNVBAcMBlN5ZG5leTEhMB8G
+    A1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMRMwEQYDVQQDDAppZC5uZW8u
+    Y29tMB4XDTE5MTEwOTA5MjQyMloXDTIwMTEwODA5MjQyMlowZDELMAkGA1UEBhMC
+    QVUxDDAKBgNVBAgMA05TVzEPMA0GA1UEBwwGU3lkbmV5MSEwHwYDVQQKDBhJbnRl
+    cm5ldCBXaWRnaXRzIFB0eSBMdGQxEzARBgNVBAMMCmlkLm5lby5jb20wgZ8wDQYJ
+    KoZIhvcNAQEBBQADgY0AMIGJAoGBANJYR+6VI5geqK4W+psJNAyLsFqV64R9RET1
+    fpo0pT1JLGrgEgt5u59f0ietYVgykrYxof2iEO/dBepssgowrzOn3C0jBiQts9Kz
+    8AEcAuTKrYIeb/Omls1r5q8b5YBtKZnDRYeLXntgWNIx0CkQtyFOPz4Jh5sMhKrT
+    mtuc0qlpAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAFreu21nJw/BeNDge/4UbvEHp
+    xqf+No7lL2OPtQvLxoRj9uxcbwbKkxdHvdE3zDCfvlJb4pXFjkJWk3UlJjya/qon
+    J4hYBMXqBOGV94DkQSWNh4IpLxT+g3G/CcgysYN6y/sYNsyvef3cyv3Lgg9mwNIq
+    KjFesSoY5o2svQNQ6kk=
+    -----END CERTIFICATE-----
+
+
+
+#The secret that an external login server will use to authenticate to the uaa using the id `login`
+# LOGIN_SECRET: loginsecret
+
+# jwt:
+#   token:
+#     signing-key: tokenKey
+
+
+spring_profiles: postgresql
+
+database:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://database:5432/postgres
+  username: postgres
+  password: password
+
+zones:
+  internal:
+    hostnames:
+      - localhost
+      - id.neo.com
+      - id.neo
+      - id
+
+jwt:
+ token:
+   signing-key: |
+    -----BEGIN RSA PRIVATE KEY-----
+    MIICXQIBAAKBgQDSWEfulSOYHqiuFvqbCTQMi7BaleuEfURE9X6aNKU9SSxq4BIL
+    ebufX9InrWFYMpK2MaH9ohDv3QXqbLIKMK8zp9wtIwYkLbPSs/ABHALkyq2CHm/z
+    ppbNa+avG+WAbSmZw0WHi157YFjSMdApELchTj8+CYebDISq05rbnNKpaQIDAQAB
+    AoGBAIRlwukegKgIbD4gAp/BXDylVFzATt03B9ir+YNQrc10mHuxDEqi1gEMDDij
+    PkmIk6YQeZkvAKAqK8YRosMdP7kMxzTQNEZ6OmT/8Wa9UPEp/nLJl9IkZwx5B+NS
+    Y34rB2YpJplrZbERU2egRL6hNMiJcQZ0TnB2MtRu8rgxWcQBAkEA6SuSF7RYA90r
+    22TPvdbI4OpCpDl1Awp7lZiCkgJxPYOtUwDw4j+sWPWZI2DZa21tg9j77xhszF83
+    tAbqp+Sh6QJBAObwl1MHPEhRBlDEsUxZ1Mmf60gT55K9yBPthVyyWH5JMZZsYJUU
+    rYK4je/IEZSltN56cMNwxVRZ1gjWp2XNm4ECQFw62s+7izEEFCv1BWM/CThGEVQq
+    UgmA5P94UvV0N9ywMCfr8Fxd+Us64ncnAPlIUJBdjNG3ZJm2dC8mqTz957kCQAkL
+    rXG0G9ldSxkIy0UJU7teBzI4jV6DDn4xVILv/WVc6pNQxWuxdqZjIjQdKwsefnok
+    Y5xUI3aNWkPYXJAxQIECQQCgq1o/WP2wmmwqDbEiQGe7kXiEKzJJpjJD7ygZq1Cj
+    N6alCim3EDA/3c5pA3rPnTxhS+PhgreO8MRmVjRCzYQW
+    -----END RSA PRIVATE KEY-----
+   claims:
+     exclude:
+       - authorities
+   policy:
+     # Will override global validity policies for the default zone only.
+     accessTokenValiditySeconds: 3600
+     refreshTokenValiditySeconds: 3600
+     activeKeyId: key-id-1
+     keys:
+       key-id-1:
+         signingKey: |
+          -----BEGIN CERTIFICATE-----
+          MIICSjCCAbMCFGhWKOgBeKIo+sgbFp/gcJ5iT0F3MA0GCSqGSIb3DQEBCwUAMGQx
+          CzAJBgNVBAYTAkFVMQwwCgYDVQQIDANOU1cxDzANBgNVBAcMBlN5ZG5leTEhMB8G
+          A1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMRMwEQYDVQQDDAppZC5uZW8u
+          Y29tMB4XDTE5MTEwOTA5MjQyMloXDTIwMTEwODA5MjQyMlowZDELMAkGA1UEBhMC
+          QVUxDDAKBgNVBAgMA05TVzEPMA0GA1UEBwwGU3lkbmV5MSEwHwYDVQQKDBhJbnRl
+          cm5ldCBXaWRnaXRzIFB0eSBMdGQxEzARBgNVBAMMCmlkLm5lby5jb20wgZ8wDQYJ
+          KoZIhvcNAQEBBQADgY0AMIGJAoGBANJYR+6VI5geqK4W+psJNAyLsFqV64R9RET1
+          fpo0pT1JLGrgEgt5u59f0ietYVgykrYxof2iEO/dBepssgowrzOn3C0jBiQts9Kz
+          8AEcAuTKrYIeb/Omls1r5q8b5YBtKZnDRYeLXntgWNIx0CkQtyFOPz4Jh5sMhKrT
+          mtuc0qlpAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAFreu21nJw/BeNDge/4UbvEHp
+          xqf+No7lL2OPtQvLxoRj9uxcbwbKkxdHvdE3zDCfvlJb4pXFjkJWk3UlJjya/qon
+          J4hYBMXqBOGV94DkQSWNh4IpLxT+g3G/CcgysYN6y/sYNsyvef3cyv3Lgg9mwNIq
+          KjFesSoY5o2svQNQ6kk=
+          -----END CERTIFICATE-----
+     # Sets the default validity for all zones
+     global:
+       accessTokenValiditySeconds: 3600
+       refreshTokenValiditySeconds: 3600
+   # This is a feature flag to turn on/off the refresh token issuance behavior. If set to true, the refresh token is only granted to clients with a scope of refresh_token for offline access.
+   refresh:
+     restrict_grant: true
+     unique: false
+     format: jwt
+
+# issuer:
+#   uri: http://id.neo.com:80/uaa
+# login:
+#   url: http://id.neo.com:80/uaa
+#   authorize:
+#     url: http://id.neo.com:80/uaa/oauth/authorize
+
+uaa:
+  # The hostname of the UAA that this login server will connect to
+  url: http://id.neo.com/uaa
+  token:
+    url: http://id.neo.com/uaa/oauth/token
+  approvals:
+    url: http://id.neo.com/uaa/approvals
+  login:
+    url: http://id.neo.com/uaa/authenticate
+  limitedFunctionality:
+    enabled: true
+    whitelist:
+      endpoints:
+        - /oauth/authorize/**
+        - /oauth/token/**
+        - /check_token/**
+        - /login/**
+        - /login.do
+        - /logout/**
+        - /logout.do
+        - /saml/**
+        - /autologin/**
+        - /authenticate/**
+        - /idp_discovery/**
+      methods:
+        - GET
+        - HEAD
+        - OPTIONS
+
+oauth:
+  user:
+    authorities:
+      - openid
+      - scim.me
+      - cloud_controller.read
+      - cloud_controller.write
+      - cloud_controller_service_permissions.read
+      - password.write
+      - scim.userids
+      - uaa.user
+      - uaa.admin
+      - approvals.me
+      - oauth.approvals
+      - profile
+      - roles
+      - user_attributes
+      - uaa.offline_token
+      - uaa.none
+  client:
+    override: true
+  clients:
+    admins:
+      id: admins
+      secret: adminssecret
+      authorized-grant-types: client_credentials
+      scope: uaa.admin,clients.read,clients.admin,zones.uaa.admin,openid,password.write,scim.read,scim.write,password.write
+      authorities: uaa.admin
+    mywebapp:
+      id: mywebapp
+      secret: changeme
+      authorized-grant-types: authorization_code
+      scope: openid,password.write
+      authorities: uaa.none
+      redirect-uri: http://localhost:3000/authorize
+      
+
+# encryption:
+#   active_key_label: key-id-1
+#   encryption_keys:
+#   - label: key-id-1
+#     passphrase: admin@neo    
+
+scim:
+  username_pattern: '[a-z0-9+\-_.@]+'
+  users:
+    - admin|admin
+  groups:
+    zones.read: Read identity zones
+    zones.write: Create and update identity zones
+    idps.read: Retrieve identity providers
+    idps.write: Create and update identity providers
+    clients.admin: Create, modify and delete OAuth clients
+    clients.write: Create and modify OAuth clients
+    clients.read: Read information about OAuth clients
+    clients.secret: Change the password of an OAuth client
+    scim.write: Create, modify and delete SCIM entities, i.e. users and groups
+    scim.read: Read all SCIM entities, i.e. users and groups
+    scim.create: Create users
+    scim.userids: Read user IDs and retrieve users by ID
+    scim.zones: Control a user's ability to manage a zone
+    scim.invite: Send invitations to users
+    password.write: Change your password
+    oauth.approval: Manage approved scopes
+    oauth.login: Authenticate users outside of the UAA
+    openid: Access profile information, i.e. email, first and last name, and phone number
+    groups.update: Update group information and memberships
+    uaa.user: Act as a user in the UAA
+    uaa.resource: Serve resources protected by the UAA
+    uaa.admin: Act as an administrator throughout the UAA
+    uaa.none: Forbid acting as a user
+    uaa.offline_token: Allow offline access
+
+# Configure whitelist for allowing cross-origin XMLHttpRequest requests.
+cors:
+  xhr:
+    allowed:
+      headers:
+        - Accept
+        - Authorization
+        - Content-Type
+        - X-Requested-With
+      origin:
+        - ^.*$
+      uris:
+        - ^/uaa/.*$
+        - ^.*$
+      methods:
+        - GET
+        - PUT
+        - POST
+        - DELETE
+        - OPTIONS
+        - HEAD
+  default:
+    allowed:
+      headers:
+        - Accept
+        - Authorization
+        - Content-Type
+        - X-Requested-With
+      origin:
+        - ^.*$
+      uris:
+        - ^/uaa/.*$
+        - ^.*$
+      methods:
+        - GET
+        - PUT
+        - POST
+        - DELETE
+        - OPTIONS
+        - HEAD

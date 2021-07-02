@@ -1,0 +1,99 @@
+version: "3.7"
+
+networks:
+  bank:
+  neo:
+
+
+services:
+  traefik:
+    container_name: traefik
+    hostname: traefik
+    image: traefik:v1.7.21
+    labels:
+      - traefik.frontend.rule=Host:proxy.neo.com
+      - traefik.port=80
+    networks:
+      bank:
+      neo:
+        aliases:
+          - proxy.neo
+          - proxy.neo.com
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./proxy/traefik.toml:/traefik.toml
+      - ./certs/:/certs/
+
+  id:
+    container_name: id
+    hostname: id
+    image: cloudfoundry/uaa
+    labels:
+      - traefik.backend=id
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:id.neo.com
+      - traefik.docker.network=bank
+      - traefik.port=8080
+      - traefik.default.protocol=http
+    ports:
+      - 9080:8080
+    volumes:
+      - ./configs/uaa.yml:/uaa/uaa.yml
+      - ./configs/log4j2.properties:/etc/config/log4j2.properties
+    environment:
+      UAA_CONFIG_PATH: /uaa
+      JAVA_OPTS: -Djava.security.egd=file:/dev/./urandom -Dlogging.config=/etc/config/log4j2.properties -Dlog4j.configurationFile=/etc/config/log4j2.properties
+    depends_on:
+      - database
+    networks:
+      bank:
+        aliases:
+          - id
+          - id.neo.com
+  uaac:
+    container_name: uaac
+    hostname: uaac
+    image: governmentpaas/cf-uaac
+    command: sleep 36000
+    networks:
+      bank:
+        aliases:
+        - uaac.neo
+  
+  database:
+    container_name: database
+    hostname: database
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - 7432:5432
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      bank:
+        aliases:
+          - database
+  
+  adminer:
+    hostname: adminer
+    container_name: adminer
+    image: adminer
+    restart: always
+    labels:
+      - traefik.backend=adminer
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:adminer.neo.com
+      - traefik.docker.network=bank
+      - traefik.port=8080
+      - traefik.default.protocol=http
+    networks:
+      bank:
+        aliases:
+          - adminer

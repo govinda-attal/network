@@ -1,0 +1,39 @@
+defaultEntryPoints = ["http", "https"]
+
+[entryPoints]
+  # [entryPoints.uaa]
+  #   address = ":8080"
+  [entryPoints.dashboard]
+    address = ":8080"    
+    [entryPoints.dashboard.auth]
+      [entryPoints.dashboard.auth.basic]
+        users = ["admin:$apr1$sbZR9k7c$qygqcp2yYx.KY4Ks4us/e/"]
+
+  [entryPoints.http]
+    address = ":80"
+      # [entryPoints.http.redirect]
+      #   entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+      [entryPoints.https.tls]
+        [[entryPoints.https.tls.certificates]]
+          certFile = "/certs/public-key.crt"
+          keyFile = "/certs/private-key.pem"
+
+[api]
+entrypoint="dashboard"
+
+# [acme]
+# email = "your_email@example.com"
+# storage = "acme.json"
+# entryPoint = "https"
+# onHostRule = true
+#   [acme.httpChallenge]
+#   entryPoint = "http"
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "neo.com"
+watch = true
+network = "neo"
+exposedbydefault = false
