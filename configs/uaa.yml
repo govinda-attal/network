@@ -1,5 +1,5 @@
 issuer:
-  uri: http://id.neo.com/uaa
+  uri: http://id.neo.com
 
 encryption:
   active_key_label: CHANGE-THIS-KEY
@@ -8,10 +8,10 @@ encryption:
     passphrase: CHANGEME
 
 login:
-  url: http://id.neo.com/uaa
-  entityBaseURL: http://id.neo.com/uaa
+  url: http://id.neo.com
+  entityBaseURL: http://id.neo.com
   authorize:
-    url: http://id.neo.com/uaa/oauth/authorize
+    url: http://id.neo.com/oauth/authorize
   serviceProviderKey: |
     -----BEGIN RSA PRIVATE KEY-----
     MIICXQIBAAKBgQDSWEfulSOYHqiuFvqbCTQMi7BaleuEfURE9X6aNKU9SSxq4BIL
@@ -47,13 +47,9 @@ login:
     -----END CERTIFICATE-----
 
 
-
-#The secret that an external login server will use to authenticate to the uaa using the id `login`
-# LOGIN_SECRET: loginsecret
-
-# jwt:
-#   token:
-#     signing-key: tokenKey
+jwt:
+  token:
+    signing-key: tokenKey
 
 
 spring_profiles: postgresql
@@ -72,76 +68,15 @@ zones:
       - id.neo
       - id
 
-jwt:
- token:
-   signing-key: |
-    -----BEGIN RSA PRIVATE KEY-----
-    MIICXQIBAAKBgQDSWEfulSOYHqiuFvqbCTQMi7BaleuEfURE9X6aNKU9SSxq4BIL
-    ebufX9InrWFYMpK2MaH9ohDv3QXqbLIKMK8zp9wtIwYkLbPSs/ABHALkyq2CHm/z
-    ppbNa+avG+WAbSmZw0WHi157YFjSMdApELchTj8+CYebDISq05rbnNKpaQIDAQAB
-    AoGBAIRlwukegKgIbD4gAp/BXDylVFzATt03B9ir+YNQrc10mHuxDEqi1gEMDDij
-    PkmIk6YQeZkvAKAqK8YRosMdP7kMxzTQNEZ6OmT/8Wa9UPEp/nLJl9IkZwx5B+NS
-    Y34rB2YpJplrZbERU2egRL6hNMiJcQZ0TnB2MtRu8rgxWcQBAkEA6SuSF7RYA90r
-    22TPvdbI4OpCpDl1Awp7lZiCkgJxPYOtUwDw4j+sWPWZI2DZa21tg9j77xhszF83
-    tAbqp+Sh6QJBAObwl1MHPEhRBlDEsUxZ1Mmf60gT55K9yBPthVyyWH5JMZZsYJUU
-    rYK4je/IEZSltN56cMNwxVRZ1gjWp2XNm4ECQFw62s+7izEEFCv1BWM/CThGEVQq
-    UgmA5P94UvV0N9ywMCfr8Fxd+Us64ncnAPlIUJBdjNG3ZJm2dC8mqTz957kCQAkL
-    rXG0G9ldSxkIy0UJU7teBzI4jV6DDn4xVILv/WVc6pNQxWuxdqZjIjQdKwsefnok
-    Y5xUI3aNWkPYXJAxQIECQQCgq1o/WP2wmmwqDbEiQGe7kXiEKzJJpjJD7ygZq1Cj
-    N6alCim3EDA/3c5pA3rPnTxhS+PhgreO8MRmVjRCzYQW
-    -----END RSA PRIVATE KEY-----
-   claims:
-     exclude:
-       - authorities
-   policy:
-     # Will override global validity policies for the default zone only.
-     accessTokenValiditySeconds: 3600
-     refreshTokenValiditySeconds: 3600
-     activeKeyId: key-id-1
-     keys:
-       key-id-1:
-         signingKey: |
-          -----BEGIN CERTIFICATE-----
-          MIICSjCCAbMCFGhWKOgBeKIo+sgbFp/gcJ5iT0F3MA0GCSqGSIb3DQEBCwUAMGQx
-          CzAJBgNVBAYTAkFVMQwwCgYDVQQIDANOU1cxDzANBgNVBAcMBlN5ZG5leTEhMB8G
-          A1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMRMwEQYDVQQDDAppZC5uZW8u
-          Y29tMB4XDTE5MTEwOTA5MjQyMloXDTIwMTEwODA5MjQyMlowZDELMAkGA1UEBhMC
-          QVUxDDAKBgNVBAgMA05TVzEPMA0GA1UEBwwGU3lkbmV5MSEwHwYDVQQKDBhJbnRl
-          cm5ldCBXaWRnaXRzIFB0eSBMdGQxEzARBgNVBAMMCmlkLm5lby5jb20wgZ8wDQYJ
-          KoZIhvcNAQEBBQADgY0AMIGJAoGBANJYR+6VI5geqK4W+psJNAyLsFqV64R9RET1
-          fpo0pT1JLGrgEgt5u59f0ietYVgykrYxof2iEO/dBepssgowrzOn3C0jBiQts9Kz
-          8AEcAuTKrYIeb/Omls1r5q8b5YBtKZnDRYeLXntgWNIx0CkQtyFOPz4Jh5sMhKrT
-          mtuc0qlpAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAFreu21nJw/BeNDge/4UbvEHp
-          xqf+No7lL2OPtQvLxoRj9uxcbwbKkxdHvdE3zDCfvlJb4pXFjkJWk3UlJjya/qon
-          J4hYBMXqBOGV94DkQSWNh4IpLxT+g3G/CcgysYN6y/sYNsyvef3cyv3Lgg9mwNIq
-          KjFesSoY5o2svQNQ6kk=
-          -----END CERTIFICATE-----
-     # Sets the default validity for all zones
-     global:
-       accessTokenValiditySeconds: 3600
-       refreshTokenValiditySeconds: 3600
-   # This is a feature flag to turn on/off the refresh token issuance behavior. If set to true, the refresh token is only granted to clients with a scope of refresh_token for offline access.
-   refresh:
-     restrict_grant: true
-     unique: false
-     format: jwt
-
-# issuer:
-#   uri: http://id.neo.com:80/uaa
-# login:
-#   url: http://id.neo.com:80/uaa
-#   authorize:
-#     url: http://id.neo.com:80/uaa/oauth/authorize
-
 uaa:
   # The hostname of the UAA that this login server will connect to
-  url: http://id.neo.com/uaa
+  url: http://id.neo.com
   token:
-    url: http://id.neo.com/uaa/oauth/token
+    url: http://id.neo.com/oauth/token
   approvals:
-    url: http://id.neo.com/uaa/approvals
+    url: http://id.neo.com/approvals
   login:
-    url: http://id.neo.com/uaa/authenticate
+    url: http://id.neo.com/authenticate
   limitedFunctionality:
     enabled: true
     whitelist:
@@ -247,7 +182,6 @@ cors:
       origin:
         - ^.*$
       uris:
-        - ^/uaa/.*$
         - ^.*$
       methods:
         - GET
@@ -266,7 +200,6 @@ cors:
       origin:
         - ^.*$
       uris:
-        - ^/uaa/.*$
         - ^.*$
       methods:
         - GET
