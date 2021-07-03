@@ -1,7 +1,7 @@
 version: "3.7"
 
 networks:
-  bank:
+  private:
   neo:
 
 services:
@@ -13,10 +13,9 @@ services:
       - traefik.frontend.rule=Host:proxy.neo.com
       - traefik.port=80
     networks:
-      bank:
+      private:
       neo:
         aliases:
-          - proxy.neo
           - proxy.neo.com
     ports:
       - "80:80"
@@ -35,7 +34,7 @@ services:
       - traefik.backend=id
       - traefik.enable=true
       - traefik.frontend.rule=Host:id.neo.com
-      - traefik.docker.network=bank
+      - traefik.docker.network=private
       - traefik.port=8080
       - traefik.default.protocol=http
     # ports:
@@ -49,9 +48,8 @@ services:
     depends_on:
       - database
     networks:
-      bank:
+      private:
         aliases:
-          - id
           - id.neo.com
   uaac:
     container_name: uaac
@@ -59,9 +57,7 @@ services:
     image: governmentpaas/cf-uaac
     command: sleep 36000
     networks:
-      bank:
-        aliases:
-        - uaac.neo
+      private:
 
   uaa-ui:
     container_name: uaa-ui
@@ -71,13 +67,12 @@ services:
       - traefik.backend=uaa-ui
       - traefik.enable=true
       - traefik.frontend.rule=Host:uaa-ui.neo.com
-      - traefik.docker.network=bank
+      - traefik.docker.network=private
       - traefik.port=8080
       - traefik.default.protocol=http
     networks:
-      bank:
+      private:
         aliases:
-        - uaa-ui.neo
         - uaa-ui.neo.com
   
   database:
@@ -93,10 +88,63 @@ services:
     volumes:
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      bank:
+      private:
         aliases:
+          - database.neo.com
+          - database.neo
           - database
   
+  cassandra:
+    image: bitnami/cassandra:latest
+    container_name: cassandra
+    hostname: cassandra
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces" ]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+    environment:
+      JVM_OPTS: -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2
+      CASSANDRA_HOST: cassandra
+      CASSANDRA_SEEDS: cassandra
+      CASSANDRA_CLUSTER_NAME: NEO
+      CASSANDRA_USER: cassandra
+      CASSANDRA_PASSWORD: cassandra
+      CASSANDRA_CGROUP_MEMORY_LIMIT: "true"
+    ports:
+      - "9042:9042"  # Expose native binary CQL port for your apps
+    networks:
+      private:
+        aliases:
+          - cassandra.neo.com
+          - cassandra.neo
+          - cassandra
+  
+  cassandra-ui:
+    hostname: cassandra-ui
+    container_name: cassandra-ui
+    image: ipushc/cassandra-web
+    restart: always
+    environment:
+      HOST_PORT: 0.0.0.0:8080
+      CASSANDRA_HOST: cassandra
+      CASSANDRA_PORT: 9042
+      CASSANDRA_USERNAME: cassandra
+      CASSANDRA_PASSWORD: cassandra
+    labels:
+      - traefik.backend=cassandra-ui
+      - traefik.enable=true
+      - traefik.frontend.rule=Host:cassandra-ui.neo.com
+      - traefik.docker.network=private
+      - traefik.port=8080
+      - traefik.default.protocol=http
+    networks:
+      private:
+        aliases:
+          - cassandra-ui.neo.com
+    depends_on:
+      - cassandra
+
   adminer:
     hostname: adminer
     container_name: adminer
@@ -106,13 +154,13 @@ services:
       - traefik.backend=adminer
       - traefik.enable=true
       - traefik.frontend.rule=Host:adminer.neo.com
-      - traefik.docker.network=bank
+      - traefik.docker.network=private
       - traefik.port=8080
       - traefik.default.protocol=http
     networks:
-      bank:
+      private:
         aliases:
-          - adminer
+          - adminer.neo.com
 
   zoo:
     image: confluentinc/cp-zookeeper:6.1.1
@@ -127,7 +175,7 @@ services:
       ZOOKEEPER_SERVERS: "zoo:22888:23888"
     restart: on-failure
     networks:
-      bank:
+      private:
         aliases:
           - zoo
 
@@ -149,7 +197,7 @@ services:
       - zoo
     restart: on-failure
     networks:
-      bank:
+      private:
         aliases:
           - kafka.neo
           - kafka.neo.com
@@ -166,12 +214,12 @@ services:
       - traefik.backend=kowl
       - traefik.enable=true
       - traefik.frontend.rule=Host:kowl.neo.com
-      - traefik.docker.network=bank
+      - traefik.docker.network=private
       - traefik.port=8080
       - traefik.default.protocol=http
     depends_on:
       - kafka
     networks:
-      bank:
+      private:
         aliases:
           - kowl
